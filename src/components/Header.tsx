@@ -1,4 +1,4 @@
-import { DotsVerticalIcon, ArrowNarrowLeftIcon } from '@heroicons/react/solid';
+import { DotsVerticalIcon, ArrowNarrowLeftIcon, MenuIcon } from '@heroicons/react/solid';
 import { IconButton } from "@mui/material";
 import { Avatar, Dropdown, Menu, Modal, PageHeader, Switch, Tabs, Typography } from "antd";
 import { useState } from 'react';
@@ -18,19 +18,12 @@ export default function Header() {
         <>
             <PageHeader
                 title="Quản lý thời gian"
+                className='border-b-gray-200 border'
                 onBack={() => null}
                 backIcon={<IconButton><ArrowNarrowLeftIcon className="w-5 h-5 text-gray-500" /></IconButton>}
                 extra={[
-                    <Link to="/profile">
-                        <IconButton>
-                            <Avatar style={{margin: 0}} src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/272402486_1909889179213797_8623708736851518609_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=9MYQptuU8XEAX-LEIDN&_nc_ht=scontent.fsgn2-6.fna&oh=00_AT8nTf4FrH2MEltjQiyq_fqT4SeRadVnJyn3jW4HraBDPw&oe=62C862C8" />
-                        </IconButton>
-                        <span className='text-gray-500'>Đặng Thuyền Vương</span>
-                    </Link>,
                     <Dropdown
-                        trigger={['click']}
-                        visible={isOpenDropdown}
-                        onVisibleChange={open => setIsOpenDropdown(open)}
+                        placement='bottomRight'
                         overlay={<Menu
                             items={[
                                 {
@@ -45,7 +38,22 @@ export default function Header() {
                             ]}
                         />}
                     >
-                        <IconButton onClick={e => e.stopPropagation()}><DotsVerticalIcon className="w-5 h-5 text-gray-500" /></IconButton>
+                        <Link to="/profile">
+                            <div>
+                                <span className='text-gray-500'>Đặng Thuyền Vương</span>
+                                <IconButton>
+                                    <Avatar style={{ margin: 0 }} src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/272402486_1909889179213797_8623708736851518609_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=9MYQptuU8XEAX-LEIDN&_nc_ht=scontent.fsgn2-6.fna&oh=00_AT8nTf4FrH2MEltjQiyq_fqT4SeRadVnJyn3jW4HraBDPw&oe=62C862C8" />
+                                </IconButton>
+                            </div>
+                        </Link>
+                    </Dropdown>,
+                    <Dropdown
+                        trigger={['click']}
+                        visible={isOpenDropdown}
+                        onVisibleChange={open => setIsOpenDropdown(open)}
+                        overlay={<div></div>}
+                    >
+                        <IconButton onClick={e => e.stopPropagation()}><MenuIcon className="w-5 h-5 text-gray-500" /></IconButton>
                     </Dropdown>
                 ]}
             />
