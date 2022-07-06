@@ -15,7 +15,7 @@ export default function Page404() {
     return (
         <Wrap>
             <Empty description="Trang này hiện đang không tồn tại, vui lòng quay lại trang chủ để tiếp tục">
-                <Button type="primary" onClick={() => navigate('/')}>Trang chủ</Button>
+                <Button size="large" type="primary" onClick={() => navigate('/')}>Trang chủ</Button>
             </Empty>
         </Wrap>
     )

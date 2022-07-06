@@ -17,9 +17,7 @@
     "jsx": "react-jsx",
     "baseUrl": "./",
     "paths": {
-      "@interceptors": ["src/interceptors"],    
-      "@configs": ["src/configs"],
-      "@cores": ["src/cores"]
+      "components": ["./src/components"]
     },
 
   },
