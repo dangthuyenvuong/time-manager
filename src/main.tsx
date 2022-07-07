@@ -6,7 +6,8 @@ import App from './App'
 import store from './stores'
 import { createTheme } from '@mui/material'
 import { ConfigProvider, Empty } from 'antd'
-
+import 'moment/locale/vi';
+import vi from 'antd/lib/locale/vi_VN';
 
 
 const theme = createTheme({
@@ -25,6 +26,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
       <ConfigProvider
+        locale={vi}
         renderEmpty={() => <Empty description="Không có dữ liệu phù hợp" />}
       >
         <BrowserRouter>
