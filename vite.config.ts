@@ -34,6 +34,9 @@ const config = defineConfig({
         },
       }
     }
+  },
+  preview: {
+    port: 3000
   }
 })
 export default config

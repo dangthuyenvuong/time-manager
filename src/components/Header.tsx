@@ -102,7 +102,7 @@ export default function Header() {
                                 <Badge dot color='#53BF9D' offset={[-13, 37]}>
                                     <span className='text-gray-500'>Đặng Thuyền Vương</span>
                                     <IconButton>
-                                        <Avatar style={{ margin: 0 }} src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/272402486_1909889179213797_8623708736851518609_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=9MYQptuU8XEAX-LEIDN&_nc_ht=scontent.fsgn2-6.fna&oh=00_AT8nTf4FrH2MEltjQiyq_fqT4SeRadVnJyn3jW4HraBDPw&oe=62C862C8" />
+                                        <Avatar style={{ margin: 0 }} src="https://cfdcircle.vn/files/teachers/vuong.jpg" />
                                     </IconButton>
                                 </Badge>
                             </Link>
