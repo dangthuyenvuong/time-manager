@@ -1,5 +1,7 @@
 import { Button, Checkbox, Form, Input } from 'antd'
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { fetchLoginAction } from 'stores/auth.slice';
 import styled from 'styled-components';
 
 const Wrap = styled.div`
@@ -14,8 +16,9 @@ const Wrap = styled.div`
 
 export default function Login() {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const onFinish = (values: any) => {
-        navigate('/')
+        dispatch(fetchLoginAction(values))
     };
 
     const onFinishFailed = (errorInfo: any) => {

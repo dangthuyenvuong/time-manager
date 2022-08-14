@@ -1,8 +1,9 @@
-import { Outlet } from "react-router-dom";
-import { Divider, Layout } from 'antd'
+import { Divider } from 'antd';
+import { ReactNode, useEffect } from 'react';
+import styled from 'styled-components';
 import Footer from "./Footer";
 import Header from "./Header";
-import styled from 'styled-components'
+import { Provider } from './Provider';
 
 const Wrap = styled.div`
     #main-content {
@@ -10,16 +11,26 @@ const Wrap = styled.div`
         padding: 20px 20px;
     }
 `
-
-export default function MainLayout() {
+export type MainLayoutProps = {
+    children?: any
+    title: string
+    afterTitle?: ReactNode
+}
+const MainLayout: React.FC<MainLayoutProps> = ({ children, ...props }) => {
     return (
-        <Wrap>
-            <Header />
-            <Divider style={{ margin: '0' }} />
-            <div id="main-content">
-                <Outlet />
-            </div>
-            <Footer />
-        </Wrap>
+        <Provider
+            {...props}
+        >
+            <Wrap>
+                <Header />
+                <Divider style={{ margin: '0' }} />
+                <div id="main-content">
+                    {children}
+                </div>
+                <Footer />
+            </Wrap>
+        </Provider>
     )
 }
+
+export default MainLayout

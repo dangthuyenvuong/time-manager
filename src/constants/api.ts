@@ -1,0 +1,3 @@
+export const USER_API = import.meta.env.VITE_USER_API
+export const AUTH_API = import.meta.env.VITE_AUTH_API
+export const FINANCIAL_API = import.meta.env.VITE_FINANCIAL_API

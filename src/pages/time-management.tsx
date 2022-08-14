@@ -1,11 +1,13 @@
-import { ArrowNarrowRightIcon, ViewGridIcon, ViewListIcon, XIcon, ChartBarIcon } from "@heroicons/react/solid";
+import { ArrowNarrowRightIcon, ViewGridIcon, ViewListIcon, XIcon, ChartBarIcon, BadgeCheckIcon, PlusIcon } from "@heroicons/react/solid";
 import { IconButton } from "@mui/material";
-import { Button, Calendar, Form, Input, Modal, Popconfirm, Tag, TimePicker } from "antd";
+import { Button, Calendar, Divider, Form, Input, Modal, Popconfirm, Select, Tag, TimePicker } from "antd";
 import moment, { Moment } from "moment";
 import { useState } from "react";
-import DropdownAction from "src/components/DropdownAction";
-import { ButtonIcon } from "src/components/style";
-import TaskItem from "src/components/TaskItem";
+import CountTime from "components/CountTime";
+import DropdownAction from "components/DropdownAction";
+import MainLayout from "components/MainLayout";
+import { ButtonIcon } from "components/style";
+import TaskItem from "components/TaskItem";
 import styled from "styled-components";
 
 
@@ -63,6 +65,9 @@ const getMonthData = (value: Moment) => {
 export default function TimeManagement() {
     const [dateSelect, setDateSelect] = useState<Moment>()
     const [isOpenAddTask, setIsOpenAddTask] = useState(false)
+    const [isOpenDropdown, setIsOpenDropdown] = useState(false)
+    const [isStart, setIsStart] = useState(false)
+
     const monthCellRender = (value: Moment) => {
         const num = getMonthData(value);
         return num ? (
@@ -105,7 +110,10 @@ export default function TimeManagement() {
         }
     ]
 
-    return <>
+    return <MainLayout
+        title="Quản lý thời gian"
+        afterTitle={<Button type='primary' danger key={3} size="large" onClick={() => setIsStart(!isStart)}>Bắt đầu tính giờ</Button>}
+    >
         <div className="flex justify-end gap-2">
             <ButtonIcon type="text" size="large" icon={<ChartBarIcon className="w-5 h-5 text-gray-500" />}>
                 Xem báo cáo
@@ -176,5 +184,63 @@ export default function TimeManagement() {
 
             </Form>
         </Modal>
-    </>
+
+        <Modal
+            width={'auto'}
+            visible={isStart}
+            onCancel={(ev) => setIsStart(false)}
+            footer={<div className="flex gap-2 flex-wrap">
+                <ButtonIcon
+                    type='dashed'
+                    danger
+                    className="flex-1 gap-1"
+                    size="large"
+                    onClick={() => setIsStart(false)}
+                // icon={<PauseIcon className=' w-5 h-5 text-red-500' />}
+                >Tạm dừng</ButtonIcon>
+                <Popconfirm
+                    placement='top'
+                    okText="Xác nhận hoàn thành"
+                    cancelText="Tiếp tục làm task này"
+                    title={<>Xác nhận hoàn thành đồng nghĩa với việc <b>task</b> này sẽ <b>không</b> cần phải <b>đưa qua ngày tiếp theo</b>?</>}
+                    okButtonProps={{ size: 'middle', style: { width: 270 } }}
+                    cancelButtonProps={{ size: 'middle', danger: true, type: 'dashed' }}
+                    icon={<BadgeCheckIcon className="absolute w-5 h-5 text-primary-900" />}
+                    onConfirm={() => setIsStart(false)}
+                >
+                    <ButtonIcon
+                        type='primary'
+                        // icon={<BadgeCheckIcon className="w-5 h-5 text-white" />}
+                        className="flex-1 gap-1"
+                        size="large" >Kết thúc</ButtonIcon>
+                </Popconfirm>
+            </div>}
+            centered
+            closable={false}
+            maskClosable={false}
+            title={<div className="flex gap-2 items-center">
+                <Select
+                    placeholder="Chọn công việc"
+                    showSearch
+                    dropdownStyle={{ maxWidth: 'unset', width: 'unset', minWidth: 300 }}
+                    dropdownRender={menu => <>
+                        {menu}
+                        <Divider style={{ margin: '8px 0' }} />
+                        <div className="flex gap-2 px-2">
+                            <Input placeholder="Thêm việc cần làm" className="flex-1" />
+                            <Button style={{ display: 'flex' }} className='flex gap-1 items-center' type='primary' icon={<PlusIcon className="w-5 h-5 text-white" />}>Thêm</Button>
+                        </div>
+                    </>}
+                >
+                    <Select.Option value="1">Ăn cơm</Select.Option>
+                    <Select.Option value="2">Đọc sách</Select.Option>
+                    <Select.Option value="3">Lên plan cho Nodejs</Select.Option>
+                    <Select.Option value="4">Lên plan cho Reactjsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa asdf asdf asdf asdf asdf asdf asdfasdf asdf asdf asdf sdf </Select.Option>
+                </Select>
+                <span> lúc <Tag color="#108ee9" style={{ margin: 0 }}>16:40:20</Tag> đến <Tag style={{ margin: 0 }} color="volcano">17:10:15</Tag> </span>
+            </div>}
+        >
+            <CountTime key={4} />
+        </Modal>
+    </MainLayout>
 }   
