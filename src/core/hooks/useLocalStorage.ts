@@ -13,6 +13,8 @@ export const useLocalStorage = <T extends any | (() => any) = any>(name: string,
             }
 
             if(typeof defaultValue === 'number') return parseFloat(_data)
+
+            if(_data) return _data
         }
 
         return defaultValue

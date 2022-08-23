@@ -1,6 +1,7 @@
-import { ArrowNarrowLeftIcon, BadgeCheckIcon, ClockIcon, CurrencyDollarIcon, PlusIcon, ViewGridIcon } from '@heroicons/react/solid';
+import { ArrowNarrowLeftIcon, BookOpenIcon, ClockIcon, CurrencyDollarIcon, LightBulbIcon, ViewGridIcon } from '@heroicons/react/solid';
 import { IconButton } from "@mui/material";
-import { Avatar, Badge, Button, Divider, Dropdown, Input, Menu, Modal, PageHeader, Popconfirm, Select, Switch, Tabs, Tag, Tooltip } from "antd";
+import { Avatar, Badge, Dropdown, Menu, Modal, PageHeader, Switch, Tabs, Tooltip } from "antd";
+import { BOOK_PATH, SO_TIET_KIEM_PATH } from 'config/path';
 import { useUser } from 'hooks/useAuth';
 import { useState } from 'react';
 import { fadeIn } from 'react-animations';
@@ -8,9 +9,8 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logoutAction } from 'stores/auth.slice';
 import styled, { keyframes } from 'styled-components';
-import CountTime from './CountTime';
+import MyAvatar from './organisms/MyAvatar';
 import { useProvider } from './Provider';
-import { ButtonIcon } from './style';
 
 const { TabPane } = Tabs
 const MenuWrap = styled.label`
@@ -80,9 +80,7 @@ export default function Header() {
                         </GalleryApp>}
                     >
                         <Tooltip title="Xem lịch của người thân" placement='right'>
-                            <IconButton>
-                                <Avatar style={{ margin: 0 }} src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/272402486_1909889179213797_8623708736851518609_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=9MYQptuU8XEAX-LEIDN&_nc_ht=scontent.fsgn2-6.fna&oh=00_AT8nTf4FrH2MEltjQiyq_fqT4SeRadVnJyn3jW4HraBDPw&oe=62C862C8" />
-                            </IconButton>
+                            <MyAvatar />
                             {title}
                         </Tooltip>
                     </Dropdown>
@@ -122,11 +120,19 @@ export default function Header() {
                                 <GalleryApp className='flex flex-wrap gap-2'>
                                     <AppItem to={'/'} className='rounded text-gray-500 hover:bg-primary-100 cursor-pointer flex flex-col justify-center items-center'>
                                         <ClockIcon className="w-8 h-8 text-sky-400" />
-                                        <span className='mt-1 text-gray-500'>Thời gian</span>
+                                        <span className='mt-1 text-gray-500'>Công việc</span>
                                     </AppItem>
-                                    <AppItem to={'/financial'} className='rounded text-gray-500 hover:bg-primary-100 cursor-pointer flex flex-col justify-center items-center'>
+                                    <AppItem to={SO_TIET_KIEM_PATH} className='rounded text-gray-500 hover:bg-primary-100 cursor-pointer flex flex-col justify-center items-center'>
                                         <CurrencyDollarIcon className="w-8 h-8 text-red-400" />
                                         <span className='mt-1 text-gray-500'>Tài chính</span>
+                                    </AppItem>
+                                    <AppItem to={BOOK_PATH} className='rounded text-blur-500 hover:bg-primary-100 cursor-pointer flex flex-col justify-center items-center'>
+                                        <BookOpenIcon className="w-8 h-8 text-blur-400" />
+                                        <span className='mt-1 text-gray-500'>Sách</span>
+                                    </AppItem>
+                                    <AppItem to={'/knowledge'} className='rounded text-fuchsia-500 hover:bg-primary-100 cursor-pointer flex flex-col justify-center items-center'>
+                                        <LightBulbIcon className="w-8 h-8 text-fuchsia-400" />
+                                        <span className='mt-1 text-gray-500'>Kiến thức</span>
                                     </AppItem>
                                     {/* <AppItem to={'/'} className='rounded text-gray-500 hover:bg-primary-100 cursor-pointer flex flex-col justify-center items-center'>
                                         <CurrencyDollarIcon className="w-8 h-8 text-red-400" />

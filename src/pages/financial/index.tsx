@@ -1,28 +1,22 @@
-import { Button, DatePicker, Divider, Form, Input, InputNumber, Modal, Select, Table } from "antd"
+import { Button, Input, Modal, Select, Table } from "antd"
+import { TableRoot } from "assets/styles/Table"
 import MainLayout from "components/MainLayout"
 import ModalCreateSoTietKiem from "components/organisms/ModalCreateSoTietKiem"
 import { useLocalStorage, useQuery } from "core"
 import moment from "moment"
 import { useCallback, useMemo, useState } from "react"
+import { Link, ThreeDotAction, Popconfirm } from "atoms"
 import { financialService } from "services/financial.service"
-import styled from "styled-components"
+import { onEnter } from "utils/event"
 import { formatNumber } from "utils/number"
+import { BILL_PATH } from "config/path"
 
-const TableRoot = styled.div`
-  tr{
-    &.disabled{
-      background: #e2eaf7;
-    }
-    .xem-lai-xuat{
-      cursor: pointer;
-    }
-  }
-`
+
 
 const UNIT: any = {
   1_000_000: 'triệu',
   1_000: 'nghìn',
-  1: 'vnđ'
+  1: 'đ'
 }
 
 export default function Financial() {
@@ -36,46 +30,6 @@ export default function Financial() {
   const [dateLoan, setDateLoan] = useLocalStorage('financial_date', 25)
   const [monthLoan, setMonthLoan] = useLocalStorage('finanlcial_month', 13)
   const { data: dataFinancial, isFetching, reFetch }: any = useQuery(() => financialService.getSoTietKiem(), [])
-
-  // const dataFinancial = [
-  //   {
-  //     id: -1,
-  //     date: '01-25-2021',
-  //     money: 100_000_000,
-  //     dateFinish: '02-25-2022',
-  //     reInvestmentMoney: 0,
-  //     daTaiDauTu: false
-  //   },
-  //   {
-  //     id: 0,
-  //     date: '01-25-2022',
-  //     money: 100_000_000,
-  //     dateFinish: '02-25-2023',
-  //     reInvestmentMoney: 0
-  //   },
-  //   {
-  //     id: 1,
-  //     date: '07-12-2022',
-  //     money: 16_000_000,
-  //     dateFinish: '08-12-2023',
-  //     reInvestmentMoney: 0
-  //   },
-  //   {
-  //     id: 2,
-  //     date: '07-30-2022',
-  //     money: 16_000_000,
-  //     dateFinish: '08-30-2023',
-  //     reInvestmentMoney: 0
-  //   },
-  //   {
-  //     id: 3,
-  //     date: '08-04-2022',
-  //     money: 10_000_000,
-  //     dateFinish: '09-04-2023',
-  //     reInvestmentMoney: 0
-
-  //   },
-  // ]
 
   const calLoan = useCallback((money: number) => {
     return money * (rate / 12 * monthLoan)
@@ -148,9 +102,6 @@ export default function Financial() {
     return _data
   }, [rate, money, year, unit, dateLoan, monthLoan, dataFinancial])
 
-  console.log('_dataFinancial', _dataFinancial);
-
-
   const now = useMemo(() => moment(), [])
   const rowSelectLoan = useMemo(() => {
     const data: any[] = []
@@ -183,32 +134,24 @@ export default function Financial() {
   }, [rowSelect, countYear, rate])
 
 
-  const _unitText = useMemo(() => UNIT[unit], [unit])
-
-  const _onEnter = useCallback((callback: any) => (e: any) => {
-    if (e.key === 'Enter') {
-      callback(e.currentTarget.value)
-    }
-  }, [])
-
-
+  const _unitText = useMemo(() => <sup>{UNIT[unit]}</sup>, [unit])
 
   return (
     <MainLayout
       title="Quản lý tài chính"
-      afterTitle={<Button type='primary' danger key={3} size="large" onClick={() => setIsOpenAdd(true)}>Thêm sổ tiết kiệm</Button>}
+      afterTitle={<Button type='ghost' key={3} size="large"><Link to={BILL_PATH}>Thống kê bill</Link></Button>}
     >
       <TableRoot>
         <div className="mb-2 flex justify-between">
           <div className="flex gap-2 items-center ">
             Ngân hàng SCB, Lãi xuất: <span><Input style={{ width: 80 }} defaultValue={(rate * 100).toFixed(2)}
-              onKeyUp={_onEnter((e: any) => {
+              onKeyUp={onEnter((e: any) => {
                 const _v = parseFloat(e)
                 if (_v) setRate(_v / 100)
               })}
             />%</span> / <span>
               <Input style={{ width: 80 }} maxLength={2} defaultValue={monthLoan}
-                onKeyUp={_onEnter((e: any) => {
+                onKeyUp={onEnter((e: any) => {
                   const _v = parseInt(e)
                   if (_v) setMonthLoan(_v)
                 })}
@@ -217,7 +160,7 @@ export default function Financial() {
             Số tiền tiết kiệm mõi tháng:
             <span>
               <Input style={{ width: 120 }} defaultValue={money}
-                onKeyUp={_onEnter((e: any) => {
+                onKeyUp={onEnter((e: any) => {
                   const _v = parseFloat(e)
                   if (_v) setMoney(_v)
                 })}
@@ -226,7 +169,7 @@ export default function Financial() {
             Số năm cho dự đoán:
             <span>
               <Input maxLength={2} style={{ width: 40, textAlign: 'center' }} defaultValue={year}
-                onKeyUp={_onEnter((e: any) => {
+                onKeyUp={onEnter((e: any) => {
                   const _v = parseInt(e)
                   if (_v) setYear(_v)
                 })}
@@ -235,7 +178,7 @@ export default function Financial() {
             Ngày gửi tiết kiệm hàng tháng:
             <span>
               <Input maxLength={2} style={{ width: 40, textAlign: 'center' }} defaultValue={dateLoan}
-                onKeyUp={_onEnter((e: any) => {
+                onKeyUp={onEnter((e: any) => {
                   const _v = parseInt(e)
                   if (_v) setDateLoan(_v)
                 })}
@@ -245,6 +188,7 @@ export default function Financial() {
 
 
           <div className="flex gap-2 items-center justify-space">
+            <Button type='primary' danger key={3} size="large" onClick={() => setIsOpenAdd(true)}>Thêm sổ tiết kiệm</Button>
             Dự đoán: <div style={{ width: 20, height: 20, background: '#e2eaf7' }}></div>
             Đơn vị:
             <Select style={{ width: 120 }} value={unit} onChange={e => setUnit(e)}>
@@ -289,10 +233,20 @@ export default function Financial() {
               render: (item) => <div>{formatNumber(item.sum / unit)} {_unitText}</div>
             },
             {
-              title: '',
-              render: (item) => <div className="xem-lai-xuat" onClick={() => setRowSelect(item)}>
-                Xem lãi xuất kép
-              </div>
+              width: 15,
+              render: (item) => <ThreeDotAction menu={[
+                {
+                  label: <span onClick={() => setRowSelect(item)}>Xem lãi xuất kép</span>
+                },
+                {
+                  label: <Popconfirm title="Bạn có chắc chắn muốn xóa sổ tiết kiệm này" onConfirm={async () => {
+                    await financialService.deleteSoTietKiem(item.id)
+                    reFetch()
+                  }}>
+                    <span className="text-red-500">Xóa</span>
+                  </Popconfirm>
+                },
+              ]} />
             }
           ]}
           dataSource={_dataFinancial}

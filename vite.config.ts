@@ -40,7 +40,7 @@ const config = defineConfig({
       "services": path.resolve(__dirname, "./src/services"),
       "hooks": path.resolve(__dirname, "./src/hooks"),
       "pages": path.resolve(__dirname, "./src/pages"),
-      "constants": path.resolve(__dirname, "./src/constants"),
+      "config": path.resolve(__dirname, "./src/config"),
       "atoms": path.resolve(__dirname, "./src/components/atoms"),
       "molecules": path.resolve(__dirname, "./src/components/molecules"),
       "organisms": path.resolve(__dirname, "./src/components/organisms"),

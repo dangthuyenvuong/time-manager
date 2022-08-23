@@ -1,6 +1,6 @@
 import { DatePicker, Divider, Form, InputNumber, Modal, Select } from 'antd'
 import moment from 'moment'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { financialService } from 'services/financial.service'
 import { formatNumber } from 'utils/number'
 
@@ -17,6 +17,10 @@ const ModalCreateSoTietKiem: React.FC<{
         interestMoeny: 0,
         sum: 0
     })
+
+    useEffect(() => {
+        form.resetFields()
+    }, [visible])
 
     const onFinish = async (values: any) => {
         try {
@@ -45,6 +49,7 @@ const ModalCreateSoTietKiem: React.FC<{
             title="Thêm sổ tiết kiệm"
             onCancel={onCancel}
             onOk={() => form.submit()}
+            maskClosable={false}
             okText="Tạo sổ tiết kiệm"
         >
             <Form

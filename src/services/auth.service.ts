@@ -1,5 +1,5 @@
-import { AUTH_API } from "constants/api";
-import apiInstantce from "constants/apiInstantce";
+import { AUTH_API } from "config/api";
+import apiInstantce from "config/apiInstantce";
 
 const api = apiInstantce.create({
     baseURL: AUTH_API
