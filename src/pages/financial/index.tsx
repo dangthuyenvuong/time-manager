@@ -30,6 +30,7 @@ export default function Financial() {
   const [dateLoan, setDateLoan] = useLocalStorage('financial_date', 25)
   const [monthLoan, setMonthLoan] = useLocalStorage('finanlcial_month', 13)
   const { data: dataFinancial, isFetching, reFetch }: any = useQuery(() => financialService.getSoTietKiem(), [])
+  const now = useMemo(() => moment(), [])
 
   const calLoan = useCallback((money: number) => {
     return money * (rate / 12 * monthLoan)
@@ -55,7 +56,8 @@ export default function Financial() {
       _year -= 1
     }
     date = date.clone().set({ date: dateLoan, month: moment().month() })
-    if (date.date() > dateLoan) {
+    
+    if (now.date() > dateLoan) {
       date.add({ month: 1 })
     }
     while (date.year() <= _year) {
@@ -102,7 +104,6 @@ export default function Financial() {
     return _data
   }, [rate, money, year, unit, dateLoan, monthLoan, dataFinancial])
 
-  const now = useMemo(() => moment(), [])
   const rowSelectLoan = useMemo(() => {
     const data: any[] = []
     if (rowSelect) {
