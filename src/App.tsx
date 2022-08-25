@@ -1,4 +1,4 @@
-import AuthRequired from 'layouts/AuthRequired';
+import { AuthRequired } from 'layouts';
 import Book from 'pages/book';
 import Bill from 'pages/financial/bill';
 import Knowledge from 'pages/knowledge';
@@ -25,10 +25,10 @@ function App() {
           <Route path="bill" element={<Bill />} />
         </Route>
         <Route path='book'>
-          <Route index element={<Book />}/>
+          <Route index element={<Book />} />
         </Route>
         <Route path='knowledge'>
-          <Route index element={<Knowledge />}/>
+          <Route index element={<Knowledge />} />
         </Route>
       </Route>
       <Route path="*" element={<Page404 />} />

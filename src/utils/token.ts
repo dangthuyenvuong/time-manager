@@ -27,7 +27,7 @@ export const getUser = <T = any>() => {
     if (user) {
         user = JSON.parse(user)
     }
-    return user as T | undefined
+    return user as T | any
 }
 
 export const clearUser = () => {
