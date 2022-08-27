@@ -39,9 +39,9 @@ export default function Financial() {
 
   let sum = 0;
   const _dataFinancial = useMemo(() => {
-    if (!dataFinancial || dataFinancial.length === 0) return []
+    if (!dataFinancial) return []
 
-    let date: any
+    let date: any = moment()
     let _data = dataFinancial.map((e: any) => {
       const interestMoney = calLoan(e.investmentMoney)
 

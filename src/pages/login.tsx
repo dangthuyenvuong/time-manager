@@ -1,7 +1,7 @@
 import { Button, Checkbox, Form, Input } from 'antd'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchLoginAction } from 'stores/auth.slice';
+import { fetchLoginAction, useAuth } from 'stores/auth.slice';
 import styled from 'styled-components';
 
 const Wrap = styled.div`
@@ -17,6 +17,7 @@ const Wrap = styled.div`
 export default function Login() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const { loading } = useAuth()
     const onFinish = (values: any) => {
         dispatch(fetchLoginAction(values))
     };
@@ -57,7 +58,7 @@ export default function Login() {
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                    <Button type="primary" htmlType="submit">
+                    <Button loading={loading} type="primary" htmlType="submit">
                         Submit
                     </Button>
                 </Form.Item>

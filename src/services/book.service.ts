@@ -6,6 +6,9 @@ const api = apiInstantce.create({
 })
 
 export const bookService = {
+    getBookDetail(id: string){
+        return api.get(id)
+    },
     getBook() {
         return api.get('')
     },

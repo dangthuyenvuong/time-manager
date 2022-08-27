@@ -1,12 +1,14 @@
-import { createAction, createSlice } from "@reduxjs/toolkit";
+import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, put, putResolve, takeLatest } from "redux-saga/effects";
 import { authService } from "services/auth.service";
 import { clearToken, clearUser, setToken } from "utils/token";
 import { StoreType } from ".";
 import { fetchUser, userActions } from "./user.slice";
 
-const initialState = {}
+const initialState = {
+    loading: false
+}
 
 
 const authSlice = createSlice({
@@ -15,6 +17,9 @@ const authSlice = createSlice({
     reducers: {
         login() { },
         logout() { },
+        setLoading(state, action: PayloadAction<boolean>) {
+            state.loading = action.payload
+        }
     },
 })
 
@@ -28,12 +33,16 @@ export const fetchLoginAction = createAction<{username: string, password: string
 
 function* fetchLogin(action: any) : any{
     try{
+        yield putResolve(authActions.setLoading(true))
         const res: any = yield call(authService.login, action.payload)
         if(res.data) {
             setToken(res.data)
-            yield put(fetchUser())
+            yield putResolve(fetchUser())
         }
     }catch(err) {}
+    finally{
+        yield putResolve(authActions.setLoading(false))
+    }
 }
 
 export const logoutAction = createAction(`${authSlice.name}/logout`)

@@ -6,7 +6,7 @@ import { useUser } from 'hooks/useAuth';
 import { useState } from 'react';
 import { fadeIn } from 'react-animations';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { logoutAction } from 'stores/auth.slice';
 import styled, { keyframes } from 'styled-components';
 import MyAvatar from './organisms/MyAvatar';
@@ -48,8 +48,7 @@ export default function Header() {
 
     const { title, afterTitle } = useProvider()
     const dispatch = useDispatch()
-
-
+    const navigate = useNavigate()
     const accountMenu = [
         {
             label: <MenuWrap className="flex justify-between items-center">Dark mode <Switch size='small' /></MenuWrap>,
@@ -86,7 +85,7 @@ export default function Header() {
                     </Dropdown>
                     {afterTitle}
                 </div>}
-                onBack={() => null}
+                onBack={() => navigate(-1)}
                 backIcon={
                     <IconButton>
                         <ArrowNarrowLeftIcon className="w-5 h-5 text-gray-500" />

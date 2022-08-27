@@ -1,17 +1,21 @@
+import { BookmarkIcon, BookOpenIcon, TagIcon } from '@heroicons/react/solid'
 import { Button } from 'antd'
 import { ActionMenuDeleteRoot } from 'assets/styles'
-import { ThreeDotAction, Popconfirm } from 'atoms'
+import { ThreeDotAction, Popconfirm, Link } from 'atoms'
 import MainLayout from 'components/MainLayout'
 import ModalCreateBook from 'components/organisms/ModalCreateBook'
+import { BOOK_DETAIL_PATH } from 'config/path'
 import { useQuery } from 'core'
+import { prompt, slugify } from 'core/utils'
 import moment from 'moment'
 import { useState } from 'react'
+import { generatePath } from 'react-router-dom'
 import { bookService } from 'services/book.service'
 import styled from 'styled-components'
 
 
 
-const CardCover = styled.div`
+export const CardCover = styled.div`
   margin: 20px;
   position: relative;
   img {
@@ -28,14 +32,14 @@ const CardCover = styled.div`
   }
 `
 
-const CardTitle = styled.div`
+export const CardTitle = styled.div`
   padding: 0 20px 20px 20px;
   font-size: 20px;
   text-align: center;
   font-weight: 500;
 `
 
-const CardAction = styled.div`
+export const CardAction = styled.div`
   position: absolute;
   right: 0;
   z-index: 1;
@@ -43,7 +47,7 @@ const CardAction = styled.div`
 `
 
 
-const CardRoot = styled.div`
+export const CardRoot = styled.div`
   border: 1px solid #ccc;
   border-radius: 3px;
   cursor: pointer;
@@ -57,8 +61,28 @@ const CardRoot = styled.div`
   }
 `
 
-const CardFooter = styled.div`
+export const CardFooter = styled.div`
 
+`
+
+
+export const Bookmark = styled.div`
+  display: flex;
+  aligin-items: center;
+  border-radius: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  font-weight: bold;
+
+  width: fit-content;
+  background: #383d97de;
+  color: white;
+  font-size: 13px;
+  gap: 6px;
+  padding: 3px 15px;
+}
 `
 export default function Book() {
   const [isOpenAdd, setIsOpenAdd] = useState(false)
@@ -81,11 +105,17 @@ export default function Book() {
                 label: 'Chỉnh sữa'
               },
               {
-                label: 'Markbook'
+                label: <span onClick={() => {
+                  const bookmark = prompt('Số trang bạn muốn đánh dấu')
+                  bookService.editBook(e.id, { bookmark: parseInt(bookmark || '0') })
+                }}>Bookmark</span>
               },
 
               {
-                label: <ActionMenuDeleteRoot>Xóa</ActionMenuDeleteRoot>
+                label: <ActionMenuDeleteRoot onClick={async () => {
+                  await bookService.deleteBook(e.id)
+                  reFetch()
+                 }}>Xóa</ActionMenuDeleteRoot>
               }
             ]
 
@@ -100,6 +130,8 @@ export default function Book() {
                 }
               )
             }
+
+            const path = generatePath(BOOK_DETAIL_PATH, { slug: slugify(e.name), id: e.id })
             return <CardRoot key={e.id}>
               <CardAction>
                 <ThreeDotAction
@@ -107,9 +139,17 @@ export default function Book() {
                 />
               </CardAction>
               <CardCover>
-                <img src={e.cover} />
+                {
+                  e.bookmark && <Bookmark><TagIcon className='w-4 text-blue' /> {e.bookmark}</Bookmark>
+                }
+
+                <Link to={path}>
+                  <img src={e.cover} />
+                </Link>
               </CardCover>
-              <CardTitle>{e.name}</CardTitle>
+              <Link to={path}>
+                <CardTitle>{e.name}</CardTitle>
+              </Link>
               <CardFooter></CardFooter>
             </CardRoot>
           }
