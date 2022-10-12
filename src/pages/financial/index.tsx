@@ -10,6 +10,7 @@ import { financialService } from "services/financial.service"
 import { onEnter } from "utils/event"
 import { formatNumber } from "utils/number"
 import { BILL_PATH } from "config/path"
+import { useSetting } from "hooks/useSetting"
 
 
 
@@ -23,19 +24,19 @@ export default function Financial() {
   const [rowSelect, setRowSelect] = useState<any>()
   const [countYear, setCountYear] = useState(5)
   const [isOpenAdd, setIsOpenAdd] = useState(false)
-  const [unit, setUnit] = useLocalStorage('financial_unit', 1_000_000)
-  const [rate, setRate] = useLocalStorage('financial_rate', 0.0745)
-  const [money, setMoney] = useLocalStorage('financial_money', 16)
-  const [year, setYear] = useLocalStorage('financial_year', 1)
-  const [dateLoan, setDateLoan] = useLocalStorage('financial_date', 25)
-  const [monthLoan, setMonthLoan] = useLocalStorage('finanlcial_month', 13)
+  const [unit, setUnit] = useSetting('financial_unit', 1_000_000)
+  const [rate, setRate] = useSetting('financial_rate', 0.0745)
+  const [money, setMoney] = useSetting('financial_money', 16)
+  const [year, setYear] = useSetting('financial_year', 1)
+  const [dateLoan, setDateLoan] = useSetting('financial_date', 25)
+  const [monthLoan, setMonthLoan] = useSetting('finanlcial_month', 13)
+  const [tietKiemDetail, setTietKiemDetail] = useState<any>()
   const { data: dataFinancial, isFetching, reFetch }: any = useQuery(() => financialService.getSoTietKiem(), [])
   const now = useMemo(() => moment(), [])
 
   const calLoan = useCallback((money: number) => {
     return money * (rate / 12 * monthLoan)
   }, [rate, monthLoan])
-
 
   let sum = 0;
   const _dataFinancial = useMemo(() => {
@@ -95,7 +96,8 @@ export default function Financial() {
         interestMoney,
         investmentMoney: _investMoney,
         sum,
-        reInvestmentMoney: reInvestmentMoney
+        reInvestmentMoney: reInvestmentMoney,
+        isForecast: true
       })
       date = date.clone().add({ month: 1 })
       // date = moment(date)
@@ -203,6 +205,17 @@ export default function Financial() {
           rowSelection={{}}
           rowKey="id"
           loading={isFetching}
+          onRow={(item) => ({
+            style: {
+              cursor: item.isForecast ? 'auto': 'pointer'
+            },
+            onClick: () => {
+              if(!item.isForecast) {
+                setTietKiemDetail(item)
+                setIsOpenAdd(true)
+              }
+            }
+          })}
           columns={[
             {
               title: 'Ngày',
@@ -297,8 +310,12 @@ export default function Financial() {
         </Modal>
         <ModalCreateSoTietKiem
           visible={isOpenAdd}
-          onCancel={() => setIsOpenAdd(false)}
+          onCancel={() => {
+            setIsOpenAdd(false)
+            setTietKiemDetail(undefined)
+          }}
           onCreate={reFetch}
+          soTietKiem={tietKiemDetail}
         />
       </TableRoot>
     </MainLayout>

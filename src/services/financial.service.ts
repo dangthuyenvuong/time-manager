@@ -12,6 +12,9 @@ export const financialService = {
     themSoTietKiem(data: any){
         return api.post('/so-tiet-kiem', data)
     },
+    editSoTietKiem(id: string, data: any){
+        return api.patch(`/so-tiet-kiem/${id}`, data)
+    },
     deleteSoTietKiem(id: string) {
         return api.delete(`/so-tiet-kiem/${id}`)
     },
@@ -21,6 +24,9 @@ export const financialService = {
     },
     addBill(data: any){
         return api.post('/bill', data)
+    },
+    editBill(id: string, data: any) {
+        return api.patch(`/bill/${id}`, data)
     },
     deleteBill(id: string) {
         return api.delete(`/bill/${id}`)

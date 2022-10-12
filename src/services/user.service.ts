@@ -6,7 +6,7 @@ const api = apiInstantce.create({
 })
 
 export const userService = {
-    getProfile: () => api.get<User>('/'),
+    getProfile: () => api.get<User>(''),
     updateProfile: (data: any) => api.patch('/', data),
     changePassword: (data: any) => api.post('/change-password', data),
     register: (data: any) => api.post('/register',data),

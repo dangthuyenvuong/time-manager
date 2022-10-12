@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
  * @returns 
  * @see [useAsync](...)
  */
-export const useAsync = <T extends any, Error extends any>(asyncFunction: () => Promise<T>, immediate = true) => {
+export const useAsync = <T extends any, Error extends any, P extends (...parameter: any[]) => Promise<any>>(asyncFunction: P, immediate = false) => {
     const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'error'>("idle");
     const [value, setValue] = useState<T | null>(null);
     const [error, setError] = useState<Error | null>(null);
@@ -15,11 +15,11 @@ export const useAsync = <T extends any, Error extends any>(asyncFunction: () => 
     // handles setting state for pending, value, and error.
     // useCallback ensures the below useEffect is not called
     // on every render, but only if asyncFunction changes.
-    const execute = useCallback(() => {
+    const execute = useCallback((...params: any[]) => {
         setStatus("pending");
         setValue(null);
         setError(null);
-        return asyncFunction()
+        return asyncFunction(...params)
             .then((response) => {
                 setValue(response);
                 setStatus("success");
@@ -34,7 +34,7 @@ export const useAsync = <T extends any, Error extends any>(asyncFunction: () => 
     // in an onClick handler.
     useEffect(() => {
         if (immediate) {
-            execute();
+            (execute as any)();
         }
     }, [execute, immediate]);
     return { execute, status, value, error };

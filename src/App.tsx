@@ -1,4 +1,4 @@
-import { BOOK_DETAIL_PATH } from 'config/path';
+import { BOOK_DETAIL_PATH, ENGLISH_PATH } from 'config/path';
 import { AuthRequired } from 'layouts';
 import Book from 'pages/book';
 import BookDetail from 'pages/book/[slug]';
@@ -10,6 +10,7 @@ import './global.less';
 import Page404 from './pages/404';
 import Financial from './pages/financial';
 import Login from './pages/login';
+import English from './pages/english';
 import TimeManagement from './pages/time-management';
 import './variable.module.css';
 
@@ -21,9 +22,9 @@ function App() {
         <Route path='/login' element={<Login />} />
       </Route>
       <Route element={<AuthRequired />}>
+        <Route path='to-do-list' element={<TimeManagement />}/>
         <Route index element={<Financial />} />
         <Route path='financial'>
-          {/* <Route index element={<Financial />} /> */}
           <Route path="bill" element={<Bill />} />
         </Route>
         <Route path='book'>
@@ -32,6 +33,9 @@ function App() {
         </Route>
         <Route path='knowledge'>
           <Route index element={<Knowledge />} />
+        </Route>
+        <Route path={ENGLISH_PATH}>
+          <Route index element={<English />}/>
         </Route>
       </Route>
       <Route path="*" element={<Page404 />} />

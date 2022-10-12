@@ -1,12 +1,13 @@
 import { ArrowNarrowLeftIcon, BookOpenIcon, ClockIcon, CurrencyDollarIcon, LightBulbIcon, ViewGridIcon } from '@heroicons/react/solid';
+import { LanguageOutlined } from '@mui/icons-material';
 import { IconButton } from "@mui/material";
 import { Avatar, Badge, Dropdown, Menu, Modal, PageHeader, Switch, Tabs, Tooltip } from "antd";
-import { BOOK_PATH, SO_TIET_KIEM_PATH } from 'config/path';
+import { BOOK_PATH, ENGLISH_PATH, SO_TIET_KIEM_PATH, TO_DO_PATH } from 'config/path';
 import { useUser } from 'hooks/useAuth';
 import { useState } from 'react';
 import { fadeIn } from 'react-animations';
 import { useDispatch } from 'react-redux';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { logoutAction } from 'stores/auth.slice';
 import styled, { keyframes } from 'styled-components';
 import MyAvatar from './organisms/MyAvatar';
@@ -117,7 +118,7 @@ export default function Header() {
                             onVisibleChange={open => setIsOpenGalleryApp(open)}
                             overlay={
                                 <GalleryApp className='flex flex-wrap gap-2'>
-                                    <AppItem to={'/'} className='rounded text-gray-500 hover:bg-primary-100 cursor-pointer flex flex-col justify-center items-center'>
+                                    <AppItem to={TO_DO_PATH} className='rounded text-gray-500 hover:bg-primary-100 cursor-pointer flex flex-col justify-center items-center'>
                                         <ClockIcon className="w-8 h-8 text-sky-400" />
                                         <span className='mt-1 text-gray-500'>Công việc</span>
                                     </AppItem>
@@ -132,6 +133,10 @@ export default function Header() {
                                     <AppItem to={'/knowledge'} className='rounded text-fuchsia-500 hover:bg-primary-100 cursor-pointer flex flex-col justify-center items-center'>
                                         <LightBulbIcon className="w-8 h-8 text-fuchsia-400" />
                                         <span className='mt-1 text-gray-500'>Kiến thức</span>
+                                    </AppItem>
+                                    <AppItem to={ENGLISH_PATH} className='rounded text-orange-500 hover:bg-primary-100 cursor-pointer flex flex-col justify-center items-center'>
+                                        <LanguageOutlined className="w-8 h-8 text-orange-400" />
+                                        <span className='mt-1 text-gray-500'>Tiếng Anh</span>
                                     </AppItem>
                                     {/* <AppItem to={'/'} className='rounded text-gray-500 hover:bg-primary-100 cursor-pointer flex flex-col justify-center items-center'>
                                         <CurrencyDollarIcon className="w-8 h-8 text-red-400" />

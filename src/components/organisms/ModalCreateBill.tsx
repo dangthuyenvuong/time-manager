@@ -1,6 +1,7 @@
 import { AutoComplete, DatePicker, Form, InputNumber, Modal, Select } from 'antd'
 import { DATE_FORMAT } from 'config'
 import { BILL_TYPE } from 'config/financial'
+import { useAsync } from 'core/hooks/useAsync'
 import moment from 'moment'
 import { useEffect } from 'react'
 import { financialService } from 'services/financial.service'
@@ -17,22 +18,32 @@ const _autoComplete: any = {
     'Đóng tiền phòng gym tháng ': {
         type: _.object.key(BILL_TYPE, 'personal')
     },
-    'Siêu thị' : {
+    'Siêu thị': {
         type: _.object.key(BILL_TYPE, 'life')
     }
 }
 
-const ModalCreatePay: React.FC<{
+const ModalCreateBill: React.FC<{
     visible: boolean
     onCancel: () => void
     onCreate: () => void
-}> = ({ visible, onCancel, onCreate }) => {
+    bill?: Bill
+}> = ({ visible, onCancel, onCreate, bill }) => {
 
     const [form] = Form.useForm()
+    const { execute: editAction, status: editStatus } = useAsync(financialService.editBill)
+    const { execute: newAction, status: addStatus } = useAsync(financialService.addBill)
 
     useEffect(() => {
         form.resetFields()
     }, [visible])
+
+    useEffect(() => {
+        if (bill) {
+            form.setFieldsValue(bill)
+        }
+
+    }, [bill])
 
 
     const onFinish = async (values: any) => {
@@ -42,11 +53,16 @@ const ModalCreatePay: React.FC<{
             const data = {
                 money, type, title, createdAt
             }
+            if (bill) {
+                await editAction(bill.id, data)
+            } else {
+                await newAction(data)
+            }
 
-            await financialService.addBill(data)
             onCreate()
             onCancel()
         } catch (err) {
+
         }
 
     }
@@ -59,7 +75,10 @@ const ModalCreatePay: React.FC<{
             title="Thêm Bill"
             onCancel={onCancel}
             onOk={() => form.submit()}
-            okText="Tạo Bill"
+            okText={bill ? 'Cập nhật bill' : "Tạo Bill"}
+            okButtonProps={{
+                loading: editStatus === 'pending' || addStatus === 'pending'
+            }}
             maskClosable={false}
         >
             <Form
@@ -110,4 +129,4 @@ const ModalCreatePay: React.FC<{
 }
 
 
-export default ModalCreatePay
+export default ModalCreateBill

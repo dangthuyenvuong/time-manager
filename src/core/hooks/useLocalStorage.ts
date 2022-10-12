@@ -23,6 +23,7 @@ export const useLocalStorage = <T extends any | (() => any) = any>(name: string,
     useEffect(() => {
         localStorage.setItem(name, data as any)
     }, [data, name])
-
+    // console.log(name, data);
+    
     return [data, setData]
 }

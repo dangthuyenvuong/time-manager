@@ -66,24 +66,25 @@ export const CardFooter = styled.div`
 `
 
 
-export const Bookmark = styled.div`
+export const Bookmark = styled.div<{ background?: string, position?: { left: string, top: string } }>`
   display: flex;
   aligin-items: center;
   border-radius: 100px;
   position: absolute;
-  left: 0;
-  top: 0;
+  left: ${(props) => props?.position?.left || '0px'};
+  top: ${(props) => props?.position?.top || '0px'};
   z-index: 1;
   font-weight: bold;
 
   width: fit-content;
-  background: #383d97de;
+  background: ${({ background }: any) => background || '#383d97de'};
   color: white;
   font-size: 13px;
   gap: 6px;
   padding: 3px 15px;
 }
 `
+
 export default function Book() {
   const [isOpenAdd, setIsOpenAdd] = useState(false)
   const { data, isFetching, reFetch }: any = useQuery(() => bookService.getBook(), [])
@@ -115,7 +116,7 @@ export default function Book() {
                 label: <ActionMenuDeleteRoot onClick={async () => {
                   await bookService.deleteBook(e.id)
                   reFetch()
-                 }}>Xóa</ActionMenuDeleteRoot>
+                }}>Xóa</ActionMenuDeleteRoot>
               }
             ]
 
@@ -140,7 +141,7 @@ export default function Book() {
               </CardAction>
               <CardCover>
                 {
-                  e.bookmark && <Bookmark><TagIcon className='w-4 text-blue' /> {e.bookmark}</Bookmark>
+                  e.bookmark && <Bookmark position={{ left: 'calc(100% - 66px)', top: '0' }}><TagIcon className='w-4 text-blue' /> {e.bookmark}</Bookmark>
                 }
 
                 <Link to={path}>

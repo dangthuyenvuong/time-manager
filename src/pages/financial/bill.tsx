@@ -2,7 +2,7 @@ import { Button, Modal, Select, Table } from 'antd'
 import { TableRoot } from 'assets/styles/Table'
 import { Link, Popconfirm, ThreeDotAction } from 'atoms'
 import MainLayout from 'components/MainLayout'
-import ModalCreatePay from 'components/organisms/ModalCreatePay'
+import ModalCreateBill from 'components/organisms/ModalCreateBill'
 import { DATE_FORMAT } from 'config'
 import { SO_TIET_KIEM_PATH } from 'config/path'
 import { useLocalStorage, useQuery } from 'core'
@@ -18,6 +18,7 @@ export default function Bill() {
     const [isOpenDetail, setIsOpenDetail] = useState(false)
     const [billType, setBillType] = useLocalStorage('financial_bill_type', 'none')
     const [dataDetail, setDataDetail] = useState<any>({})
+    const [billDetail, setBillDetail] = useState()
     const { data: bills, isFetching, reFetch }: any = useQuery(() => financialService.getBill(), [])
     const data = useMemo(() => {
         if (bills) {
@@ -140,17 +141,21 @@ export default function Bill() {
                     </div>
 
                     <div className="flex gap-2 items-center justify-space">
+                        Số tiền đang có trong tài khoản: <span>{ }</span>
                         <Button type='primary' danger key={3} size="large" onClick={() => setIsOpenAdd(true)}>Thêm Bill</Button>
                     </div>
                 </div>
                 <Table
                     rowKey={"id"}
                     onRow={(item) => ({
-                        style: { cursor: billType !== 'none' ? 'pointer' : 'auto' },
+                        style: { cursor: 'pointer' },
                         onClick: () => {
                             if (billType !== 'none') {
                                 setDataDetail(item)
                                 setIsOpenDetail(true)
+                            } else {
+                                setBillDetail(item)
+                                setIsOpenAdd(true)
                             }
                         }
                     })}
@@ -159,10 +164,14 @@ export default function Bill() {
                     dataSource={data}
                 />
             </TableRoot>
-            <ModalCreatePay
+            <ModalCreateBill
                 visible={isOpenAdd}
-                onCancel={() => setIsOpenAdd(false)}
+                onCancel={() => {
+                    setIsOpenAdd(false)
+                    setBillDetail(undefined)
+                }}
                 onCreate={reFetch}
+                bill={billDetail}
             />
             <Modal footer={null} title={`${dataDetail.title} ${dataDetail?.id}`} visible={isOpenDetail} onCancel={() => setIsOpenDetail(false)}>
                 <Table

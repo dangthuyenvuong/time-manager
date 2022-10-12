@@ -1,4 +1,5 @@
 import { DatePicker, Divider, Form, InputNumber, Modal, Select } from 'antd'
+import { useAsync } from 'core/hooks/useAsync'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { financialService } from 'services/financial.service'
@@ -7,9 +8,12 @@ import { formatNumber } from 'utils/number'
 const ModalCreateSoTietKiem: React.FC<{
     visible: boolean
     onCancel: () => void
-    onCreate: () => void
-}> = ({ visible, onCancel, onCreate }) => {
+    onCreate: () => void,
+    soTietKiem?: any
+}> = ({ visible, onCancel, onCreate, soTietKiem }) => {
 
+    const { execute: themSoTietKiem, status } = useAsync(financialService.themSoTietKiem)
+    const { execute: editSoTietKiem, status: editSoTietKiemStatus } = useAsync(financialService.editSoTietKiem)
     const [form] = Form.useForm()
     const [calculator, setCalculator] = useState({
         dateDue: moment(),
@@ -22,6 +26,35 @@ const ModalCreateSoTietKiem: React.FC<{
         form.resetFields()
     }, [visible])
 
+    useEffect(() => {
+        if (soTietKiem) {
+            form.setFieldsValue({
+                ...soTietKiem,
+                interestRate: (soTietKiem.interestRate * 100).toFixed(2)
+            })
+            forcecast()
+        }
+    }, [soTietKiem])
+
+
+    const forcecast = () => {
+        let { depositMonth, interestRate, investmentMoney, startDate } = form.getFieldsValue()
+
+        if (depositMonth && interestRate && investmentMoney) {
+            interestRate = interestRate / 100
+            setCalculator({
+                dateDue: startDate.clone().add({ month: depositMonth }),
+                investmentMoney: Math.round(investmentMoney),
+                interestMoeny: Math.round(investmentMoney * (interestRate / 12 * depositMonth)),
+                sum: Math.round(investmentMoney + investmentMoney * (interestRate / 12 * depositMonth)),
+            })
+        }
+
+    }
+
+
+
+
     const onFinish = async (values: any) => {
         try {
             let { depositMonth, interestRate, investmentMoney, startDate } = values
@@ -33,7 +66,12 @@ const ModalCreateSoTietKiem: React.FC<{
                 depositMonth
             }
 
-            await financialService.themSoTietKiem(data)
+            if (soTietKiem) {
+                await editSoTietKiem(soTietKiem.id, data)
+            } else {
+                await themSoTietKiem(data)
+            }
+
             onCreate()
             onCancel()
         } catch (err) {
@@ -46,9 +84,12 @@ const ModalCreateSoTietKiem: React.FC<{
     return (
         <Modal
             visible={visible}
-            title="Thêm sổ tiết kiệm"
+            title={soTietKiem ? "Chỉnh sửa sổ tiết kiệm" : "Thêm sổ tiết kiệm"}
             onCancel={onCancel}
             onOk={() => form.submit()}
+            okButtonProps={{
+                loading: status === 'pending' || editSoTietKiemStatus === 'pending'
+            }}
             maskClosable={false}
             okText="Tạo sổ tiết kiệm"
         >
@@ -56,20 +97,7 @@ const ModalCreateSoTietKiem: React.FC<{
                 labelCol={{ span: 6 }}
                 onFinish={onFinish}
                 form={form}
-                onFieldsChange={() => {
-                    let { depositMonth, interestRate, investmentMoney, startDate } = form.getFieldsValue()
-
-                    if (depositMonth && interestRate && investmentMoney) {
-                        interestRate = interestRate / 100
-                        setCalculator({
-                            dateDue: startDate.clone().add({ month: depositMonth }),
-                            investmentMoney: Math.round(investmentMoney),
-                            interestMoeny: Math.round(investmentMoney * (interestRate / 12 * depositMonth)),
-                            sum: Math.round(investmentMoney + investmentMoney * (interestRate / 12 * depositMonth)),
-                        })
-                    }
-
-                }}
+                onFieldsChange={forcecast}
                 initialValues={{
                     startDate: moment(),
                     depositMonth: 13
