@@ -8,6 +8,7 @@ import { createTheme } from '@mui/material'
 import { ConfigProvider, Empty } from 'antd'
 import 'moment/locale/vi';
 import vi from 'antd/lib/locale/vi_VN';
+import { PageProvider } from 'core'
 
 
 const theme = createTheme({
@@ -24,6 +25,7 @@ ConfigProvider.config({
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   // <React.StrictMode>
+  //<PageProvider>
   <Provider store={store}>
     <ConfigProvider
       locale={vi}
@@ -34,5 +36,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       </BrowserRouter>
     </ConfigProvider>
   </Provider>
+  //</PageProvider>
   // </React.StrictMode>
 )

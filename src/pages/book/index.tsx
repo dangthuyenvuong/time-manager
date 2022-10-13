@@ -3,10 +3,12 @@ import { Button } from 'antd'
 import { ActionMenuDeleteRoot } from 'assets/styles'
 import { ThreeDotAction, Popconfirm, Link } from 'atoms'
 import MainLayout from 'components/MainLayout'
+import { ModalBookmark } from 'components/organisms/ModalBookmark'
 import ModalCreateBook from 'components/organisms/ModalCreateBook'
 import { BOOK_DETAIL_PATH } from 'config/path'
-import { useQuery } from 'core'
+import { usePage, useQuery } from 'core'
 import { prompt, slugify } from 'core/utils'
+import { openModal } from 'core/utils/openPrompt'
 import moment from 'moment'
 import { useState } from 'react'
 import { generatePath } from 'react-router-dom'
@@ -87,6 +89,7 @@ export const Bookmark = styled.div<{ background?: string, position?: { left: str
 
 export default function Book() {
   const [isOpenAdd, setIsOpenAdd] = useState(false)
+  // const { openPrompt } = usePage()
   const { data, isFetching, reFetch }: any = useQuery(() => bookService.getBook(), [])
 
   return (
@@ -101,22 +104,24 @@ export default function Book() {
         {
           data?.map((e: any) => {
 
-            const menu = [
+            const menu: any = [
               {
                 label: 'Chỉnh sữa'
               },
               {
-                label: <span onClick={() => {
-                  const bookmark = prompt('Số trang bạn muốn đánh dấu')
-                  bookService.editBook(e.id, { bookmark: parseInt(bookmark || '0') })
-                }}>Bookmark</span>
+                label: <span >Bookmark</span>,
+                onClick: async () => {
+                  const bookmark = await openModal(<ModalBookmark value={e.bookmark} onCancel={() => console.log('onCancel')}/>)
+                  bookService.editBook(e.id, bookmark)
+                }
               },
 
               {
-                label: <ActionMenuDeleteRoot onClick={async () => {
+                label: <ActionMenuDeleteRoot>Xóa</ActionMenuDeleteRoot>,
+                onClick: async () => {
                   await bookService.deleteBook(e.id)
                   reFetch()
-                }}>Xóa</ActionMenuDeleteRoot>
+                }
               }
             ]
 
@@ -127,7 +132,7 @@ export default function Book() {
                     bookService.editBook(e.id, { finishedAt: moment() })
                   }}>
                     <span>Đánh dấu đã hoàn thành</span>
-                  </Popconfirm>
+                  </Popconfirm>,
                 }
               )
             }
