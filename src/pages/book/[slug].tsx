@@ -13,7 +13,7 @@ export default function BookDetail() {
     <MainLayout
       title="Quản lý sách"
     >
-      <div className="sidebar" style={{width: 330}}>
+      <div className="sidebar" style={{ width: 330, maxWidth: '100%' }}>
         <CardRoot>
           <CardAction>
             {/* <ThreeDotAction
@@ -22,11 +22,13 @@ export default function BookDetail() {
           </CardAction>
           <CardCover>
             <img src={book.cover} />
-
           </CardCover>
           <CardTitle>{book.name}</CardTitle>
           <CardFooter></CardFooter>
         </CardRoot>
+      </div>
+      <div>
+        
       </div>
     </MainLayout>
   )

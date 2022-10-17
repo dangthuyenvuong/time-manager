@@ -19,8 +19,10 @@ const getElement = () => {
 }
 
 const unMount = () => {
-    root?.unmount()
-    root = undefined
+    setTimeout(() => {
+        root?.unmount()
+        root = undefined
+    }, 1000)
 }
 
 export const openModal: PageProviderProps['openPrompt'] = (Component: any) => {
@@ -31,7 +33,6 @@ export const openModal: PageProviderProps['openPrompt'] = (Component: any) => {
         element?.render(
             React.Children.map(Component, child => React.cloneElement(child, {
                 onCancel: (value: any) => {
-                    console.log('cancel');
 
                     rej(false)
                     // ReactDOM.createRoot(element).unmount()
@@ -39,8 +40,6 @@ export const openModal: PageProviderProps['openPrompt'] = (Component: any) => {
                     unMount()
                 },
                 onOk: (value: any) => {
-                    console.log('ok');
-
                     res(value)
                     // ReactDOM.createRoot(element).unmount()
                     child.props?.onOk?.(value)
