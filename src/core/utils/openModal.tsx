@@ -18,8 +18,10 @@ const getElement = () => {
 }
 
 const unMount = () => {
-    root?.unmount()
-    root = undefined
+    setTimeout(() => {
+        root?.unmount()
+        root = undefined
+    }, 1000)
 }
 
 export const openModal: PageProviderProps['openPrompt'] = (Component: any) => {
