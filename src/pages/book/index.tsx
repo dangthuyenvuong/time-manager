@@ -8,7 +8,7 @@ import ModalCreateBook from 'components/organisms/ModalCreateBook'
 import { BOOK_DETAIL_PATH } from 'config/path'
 import { usePage, useQuery } from 'core'
 import { prompt, slugify } from 'core/utils'
-import { openModal } from 'core/utils/openPrompt'
+import { openModal } from 'core/utils/openModal'
 import moment from 'moment'
 import { useState } from 'react'
 import { generatePath } from 'react-router-dom'
@@ -70,7 +70,7 @@ export const CardFooter = styled.div`
 
 export const Bookmark = styled.div<{ background?: string, position?: { left: string, top: string } }>`
   display: flex;
-  aligin-items: center;
+  align-items: center;
   border-radius: 100px;
   position: absolute;
   left: ${(props) => props?.position?.left || '0px'};
@@ -84,7 +84,6 @@ export const Bookmark = styled.div<{ background?: string, position?: { left: str
   font-size: 13px;
   gap: 6px;
   padding: 3px 15px;
-}
 `
 
 export default function Book() {

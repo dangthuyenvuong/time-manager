@@ -1,5 +1,6 @@
 import { uniqueId } from "@antv/util"
-import _ from "lodash"
+import omit from "lodash/omit"
+import map from "lodash/map"
 import React, { createContext, useContext, useState } from "react"
 
 export interface PageProviderProps {
@@ -21,19 +22,19 @@ export const PageProvider: React.FC<{ children: any }> = ({ children }) => {
                 ...com, [name]: <Component
                     onCancel={() => {
                         rej(false)
-                        setTimeout(() => setCom(_.omit(com, name)), 500)
+                        setTimeout(() => setCom(omit(com, name)), 500)
                     }}
                     onOk={(value) => {
                         res(value)
-                        _.omit(com, name)
-                        setTimeout(() => setCom(_.omit(com, name)), 500)
+                        omit(com, name)
+                        setTimeout(() => setCom(omit(com, name)), 500)
                     }}
                     {...value}
                 />
             })
         })
     }
-    return <Context.Provider value={{ openPrompt }}>{children} {_.map(com, (e, i) => <React.Fragment key={i}>{e}</React.Fragment>)}</Context.Provider>
+    return <Context.Provider value={{ openPrompt }}>{children} {map(com, (e, i) => <React.Fragment key={i}>{e}</React.Fragment>)}</Context.Provider>
 }
 
 export const usePage = () => useContext(Context)
