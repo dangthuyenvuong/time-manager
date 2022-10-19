@@ -55,6 +55,11 @@ const config = defineConfig({
   },
   build: {
     outDir: './build',
+    rollupOptions: {
+      external: [
+        /^node:.*/
+      ]
+    }
   },
   css: {
     preprocessorOptions: {

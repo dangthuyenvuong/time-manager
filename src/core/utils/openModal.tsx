@@ -1,6 +1,5 @@
-import ReactDOM from 'react-dom/client'
-import ReactDOM1 from 'react-dom'
 import React from 'react'
+import ReactDOM from 'react-dom/client'
 export interface PageProviderProps {
     openPrompt: (component: JSX.Element) => Promise<any>
 }
@@ -32,19 +31,15 @@ export const openModal: PageProviderProps['openPrompt'] = (Component: any) => {
     return new Promise((res, rej) => {
         element?.render(
             React.Children.map(Component, child => React.cloneElement(child, {
-                onCancel: (value: any) => {
-
-                    rej(false)
-                    // ReactDOM.createRoot(element).unmount()
-                    child.props?.onCancel?.(value)
+                onCancel: (cancel: any) => {
+                    rej(cancel)
+                    child.props?.onCancel?.(cancel)
                     unMount()
                 },
                 onOk: (value: any) => {
                     res(value)
-                    // ReactDOM.createRoot(element).unmount()
                     child.props?.onOk?.(value)
                     unMount()
-
                 }
             }))
         )
