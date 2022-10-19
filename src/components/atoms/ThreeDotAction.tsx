@@ -7,7 +7,7 @@ export const ThreeDotAction: React.FC<{
     menu: { label: ReactNode }[]
 }> = ({ menu }) => {
 
-    const _menu = useMemo(() => menu.map((e: any, i: number) => ({ ...e, key: i })), [])
+    const _menu = useMemo(() => menu.map((e: any, i: number) => ({ ...e, key: i })), [menu])
 
     return (
         <Dropdown overlay={<Menu

@@ -1,9 +1,9 @@
 import { ThreeDotAction, Link } from "atoms"
 import MainLayout from "components/MainLayout"
+import { CardAction, CardCover, CardFooter, CardRoot, CardTitle } from "components/molecules/BookCard"
 import { useQuery } from "core"
 import { useParams } from "react-router-dom"
 import { bookService } from "services/book.service"
-import { CardAction, CardCover, CardFooter, CardRoot, CardTitle } from "."
 
 export default function BookDetail() {
   const { id } = useParams()

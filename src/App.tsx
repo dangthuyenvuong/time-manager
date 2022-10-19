@@ -1,4 +1,4 @@
-import { BOOK_DETAIL_PATH, ENGLISH_PATH } from 'config/path';
+import { BOOK_DETAIL_PATH, BOOK_REQUEST_PATH, ENGLISH_PATH } from 'config/path';
 import { AuthRequired } from 'layouts';
 import Book from 'pages/book';
 import BookDetail from 'pages/book/[slug]';
@@ -13,6 +13,7 @@ import Login from './pages/login';
 import English from './pages/english';
 import TimeManagement from './pages/time-management';
 import './variable.module.css';
+import BookRequest from 'pages/book/request';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         </Route>
         <Route path='book'>
           <Route index element={<Book />} />
+          <Route path={BOOK_REQUEST_PATH} element={<BookRequest />} />
           <Route path={BOOK_DETAIL_PATH} element={<BookDetail />} />
         </Route>
         <Route path='knowledge'>

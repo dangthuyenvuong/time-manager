@@ -1,10 +1,10 @@
 import { DatePicker, Form, Input, Modal, Select } from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
 import { DATE_FORMAT } from 'config'
+import { useQuery } from 'core'
 import moment from 'moment'
 import { useEffect } from 'react'
 import { bookService } from 'services/book.service'
-import { financialService } from 'services/financial.service'
 import _ from 'utils/_'
 
 
@@ -20,7 +20,11 @@ const ModalCreateBook: React.FC<{
     visible: boolean
     onCancel: () => void
     onCreate: () => void
-}> = ({ visible, onCancel, onCreate }) => {
+    request?: boolean
+}> = ({ visible, onCancel, onCreate, request = false }) => {
+
+
+    const { data: categories } = useQuery(() => bookService.getCategories())
 
     const [form] = Form.useForm()
 
@@ -34,7 +38,7 @@ const ModalCreateBook: React.FC<{
             let { name, type, cover, createdAt } = values
 
             const data = {
-                name, type, cover, createdAt
+                name, type, cover, createdAt, request
             }
 
             await bookService.themBook(data)
@@ -50,7 +54,7 @@ const ModalCreateBook: React.FC<{
     return (
         <Modal
             visible={visible}
-            title="Thêm Sách"
+            title={`Thêm Sách${request ? ' vào danh sách chờ mua': ''}`}
             onCancel={onCancel}
             onOk={() => form.submit()}
             okText="Thêm Sách"
@@ -60,7 +64,7 @@ const ModalCreateBook: React.FC<{
                 labelCol={{ span: 6 }}
                 onFinish={onFinish}
                 onFieldsChange={(changeField) => {
-                   
+
                 }}
                 form={form}
 
@@ -71,15 +75,15 @@ const ModalCreateBook: React.FC<{
                 <Form.Item label="Tên sách" name="name" rules={[{ required: true }]}>
                     <Input />
                 </Form.Item>
-                
+
                 <Form.Item label="Hình đại diện" name="cover" rules={[{ required: true }]}>
                     <TextArea />
                 </Form.Item>
-                
+
                 <Form.Item label="Loại" name="type" rules={[{ required: true }]}>
                     <Select>
                         {
-                            _.object.map(BOOK_TYPE, (item, i) => <Select.Option value={i}>{item}</Select.Option>)
+                            _.object.map(categories, (item, i) => <Select.Option value={item.id}>{item.name}</Select.Option>)
                         }
                     </Select>
                 </Form.Item>

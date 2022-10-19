@@ -9,17 +9,21 @@ export const bookService = {
     getBookDetail(id: string){
         return api.get(id)
     },
-    getBook() {
-        return api.get('')
+    getBook(query = '') {
+        return api.get(`/read${query}`)
     },
     themBook(data: any) {
-        return api.post('', data)
+        return api.post('/read', data)
     },
     deleteBook(id: string) {
-        return api.delete(`/${id}`)
+        return api.delete(`/read/${id}`)
     },
     editBook(id: string, data: any) {
-        return api.patch(`/${id}`, data)
+        return api.patch(`/read/${id}`, data)
+    },
+
+    getCategories() {
+        return api.get('/category')
     }
 
 }
