@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-export interface PageProviderProps {
+export interface OpenModal {
     openPrompt: (component: JSX.Element) => Promise<any>
 }
 
@@ -24,7 +24,7 @@ const unMount = () => {
     }, 1000)
 }
 
-export const openModal: PageProviderProps['openPrompt'] = (Component: any) => {
+export const openModal: OpenModal['openPrompt'] = (Component: any) => {
 
     let element = getElement()
 
