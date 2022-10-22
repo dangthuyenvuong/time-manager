@@ -9,7 +9,7 @@ import { useLocalStorage, useQuery } from 'core'
 import moment from 'moment'
 import { useMemo, useState } from 'react'
 import { financialService } from 'services/financial.service'
-import { formatNumber } from 'utils/number'
+import { currency } from 'utils/number'
 import _ from 'utils/_'
 
 
@@ -73,7 +73,7 @@ export default function Bill() {
                 },
                 {
                     title: 'Tiền',
-                    render: (item: any) => <div>{formatNumber(item.money)}<sup>đ</sup></div>
+                    render: (item: any) => <div>{currency(item.money)}<sup>đ</sup></div>
                 },
                 {
                     width: 15,
@@ -102,7 +102,7 @@ export default function Bill() {
                 },
                 {
                     title: 'Tổng tiền',
-                    render: (item: any) => <div>{formatNumber(item.money)}<sup>đ</sup></div>
+                    render: (item: any) => <div>{currency(item.money)}<sup>đ</sup></div>
                 },
                 {
                     width: 15,
@@ -188,7 +188,7 @@ export default function Bill() {
                         },
                         {
                             title: 'Tiền',
-                            render: (item: any) => <div>{formatNumber(item.money)}<sup>đ</sup></div>
+                            render: (item: any) => <div>{currency(item.money)}<sup>đ</sup></div>
                         },
                     ]}
 

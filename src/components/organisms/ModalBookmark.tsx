@@ -34,6 +34,9 @@ export const ModalBookmark: React.FC<{
                         style={{ width: '100%' }}
                         min={0}
                         ref={inputFocus}
+                        onKeyDown={ev => {
+                            if(ev.key === 'Enter') _onOk()
+                        }}
                     />
                 </Form.Item>
             </Form>

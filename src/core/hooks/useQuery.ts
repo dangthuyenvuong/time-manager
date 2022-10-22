@@ -76,7 +76,8 @@ export const useQuery = <T>(
                 res = await promise();
             }
             if (res instanceof Object) {
-                setState({ data: res });
+
+                setState({ data: res?.data || res });
             }
         } catch (err: any) {
             // if (err.error === "DATABASE:10000") {

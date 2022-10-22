@@ -3,7 +3,7 @@ import { useAsync } from 'core/hooks/useAsync'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { financialService } from 'services/financial.service'
-import { formatNumber } from 'utils/number'
+import { currency, formatNumber } from 'utils/number'
 
 const ModalCreateSoTietKiem: React.FC<{
     visible: boolean
@@ -65,7 +65,7 @@ const ModalCreateSoTietKiem: React.FC<{
                 interestRate,
                 depositMonth
             }
-
+            
             if (soTietKiem) {
                 await editSoTietKiem(soTietKiem.id, data)
             } else {
@@ -104,7 +104,12 @@ const ModalCreateSoTietKiem: React.FC<{
                 }}
             >
                 <Form.Item label="Số tiền tiết kiệm" name="investmentMoney" rules={[{ required: true }]}>
-                    <InputNumber style={{ width: '100%' }} addonAfter={<span className="capitalize">Đồng</span>} />
+                    <InputNumber
+                        style={{ width: '100%' }}
+                        addonAfter={<span className="capitalize">Đồng</span>}
+                        formatter={value => formatNumber(value as number)}
+                        // parser={value => value!.replace(',', '')}
+                    />
                 </Form.Item>
                 <Form.Item label="Kỳ hạn (tháng)" name="depositMonth">
                     <Select>
@@ -136,8 +141,8 @@ const ModalCreateSoTietKiem: React.FC<{
                 <Divider />
                 <div style={{ background: 'rgb(226, 234, 247)', padding: '10px 20px' }}>
                     <p className="flex justify-between"><span>Ngày đáo hạn:</span> <span>{calculator.dateDue.format('DD/MM/YYYY')}</span></p>
-                    <p className="flex justify-between"><span>Số tiền lãi:</span> <span>{formatNumber(calculator.interestMoeny)} đồng</span></p>
-                    <p className="flex justify-between mb-0"><span>Số tiền khi đến hạn:</span> <span>{formatNumber(calculator.sum)} đồng</span></p>
+                    <p className="flex justify-between"><span>Số tiền lãi:</span> <span>{currency(calculator.interestMoeny)} đồng</span></p>
+                    <p className="flex justify-between mb-0"><span>Số tiền khi đến hạn:</span> <span>{currency(calculator.sum)} đồng</span></p>
                 </div>
             </Form>
         </Modal>

@@ -24,6 +24,9 @@ export const bookService = {
 
     getCategories() {
         return api.get('/category')
+    },
+    getReadToday(){
+        return api.get('/log/today')
     }
 
 }

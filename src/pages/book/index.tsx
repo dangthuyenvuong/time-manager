@@ -19,14 +19,16 @@ export default function Book() {
   const navigate = useNavigate()
   // const { openPrompt } = usePage()
   const { data, isFetching, reFetch }: any = useQuery(() => bookService.getBook(), [])
-
+  const { data: today, reFetch: refetchToday }: any = useQuery(() => bookService.getReadToday())
+  
   return (
     <MainLayout
       title="Quản lý sách"
       afterTitle={
-        <span className="flex gap-1">
+        <span className="flex gap-1 items-center font-normal">
           <Button type='primary' danger size="large" onClick={() => navigate(BOOK_REQUEST_PATH)}>Sách chờ mua</Button>
-          <Button type='primary'  size="large" onClick={() => setIsOpenAdd(true)}>Thêm sách</Button>
+          <Button type='primary' size="large" onClick={() => setIsOpenAdd(true)}>Thêm sách</Button>
+          <span className='text-base '>Số trang sách đã đọc hôm nay: <b>{today?.read}</b> trang</span>
         </span>
       }
     >
@@ -39,6 +41,15 @@ export default function Book() {
 
             const menu: any = [
               {
+                label: <span >Bookmark</span>,
+                onClick: async () => {
+                  const bookmark = await openModal(<ModalBookmark value={e.bookmark} onCancel={() => console.log('onCancel')} />)
+                  await bookService.editBook(e.id, bookmark)
+                  reFetch()
+                  refetchToday()
+                }
+              },
+              {
                 label: 'Chỉnh sữa'
               },
               {
@@ -48,15 +59,6 @@ export default function Book() {
                   reFetch()
                 }
               },
-              {
-                label: <span >Bookmark</span>,
-                onClick: async () => {
-                  const bookmark = await openModal(<ModalBookmark value={e.bookmark} onCancel={() => console.log('onCancel')} />)
-                  bookService.editBook(e.id, bookmark)
-                  reFetch()
-                }
-              },
-
               {
                 label: <ActionMenuDeleteRoot>Xóa</ActionMenuDeleteRoot>,
                 onClick: async () => {

@@ -5,7 +5,7 @@ import moment from "moment"
 import { useCallback, useMemo, useState } from "react"
 import { financialService } from "services/financial.service"
 import styled from "styled-components"
-import { formatNumber } from "utils/number"
+import { currency } from "utils/number"
 
 const TableRoot = styled.div`
   tr{
@@ -271,8 +271,8 @@ const FinancialTemplate: React.FC = () => {
                             render: (item) => <div>
                                 {
                                     item.tienNamTruoc ? <div>
-                                        {formatNumber((item.money - item.tienNamTruoc) / unit)} + {formatNumber(item.tienNamTruoc / unit)} = {formatNumber(item.money / unit)} {_unitText}
-                                    </div> : <div>{formatNumber(item.money / unit)} {_unitText}</div>
+                                        {currency((item.money - item.tienNamTruoc) / unit)} + {currency(item.tienNamTruoc / unit)} = {currency(item.money / unit)} {_unitText}
+                                    </div> : <div>{currency(item.money / unit)} {_unitText}</div>
                                 }
 
                             </div>
@@ -284,12 +284,12 @@ const FinancialTemplate: React.FC = () => {
                         {
                             title: 'Gốc + lãi',
                             render: (item) => <div>
-                                {formatNumber(item.money / unit)} + {formatNumber(item.loan / unit)} = {formatNumber((item.money + item.loan) / unit)} {_unitText}
+                                {currency(item.money / unit)} + {currency(item.loan / unit)} = {currency((item.money + item.loan) / unit)} {_unitText}
                             </div>
                         },
                         {
                             title: 'Tổng số tiền tiết kiệm',
-                            render: (item) => <div>{formatNumber(item.sum / unit)} {_unitText}</div>
+                            render: (item) => <div>{currency(item.sum / unit)} {_unitText}</div>
                         },
                         {
                             title: '',
@@ -309,7 +309,7 @@ const FinancialTemplate: React.FC = () => {
                         setRowSelect(null)
                         setCountYear(5)
                     }}
-                    title={rowSelect && <div>Lãi xuất kép: Gốc <span className="text-primary-900">{formatNumber(rowSelect.money / unit)} {_unitText}</span>
+                    title={rowSelect && <div>Lãi xuất kép: Gốc <span className="text-primary-900">{currency(rowSelect.money / unit)} {_unitText}</span>
                         <span className="ml-1 mr-1">
                             <Select value={countYear} onChange={v => setCountYear(v)}>
                                 <Select.Option value={5}>5 lần gửi</Select.Option>
@@ -320,7 +320,7 @@ const FinancialTemplate: React.FC = () => {
                                 <Select.Option value={30}>30 lần gửi</Select.Option>
                             </Select>
                         </span>
-                        --{">"} Tổng: <span className="text-primary-900">{formatNumber(rowSelectLoan[rowSelectLoan.length - 1].money / unit)} {_unitText}</span>
+                        --{">"} Tổng: <span className="text-primary-900">{currency(rowSelectLoan[rowSelectLoan.length - 1].money / unit)} {_unitText}</span>
                     </div>}
                     footer={null}
                 >
@@ -337,7 +337,7 @@ const FinancialTemplate: React.FC = () => {
                             },
                             {
                                 title: 'Gốc + Lãi',
-                                render: (item) => <div> {formatNumber(item.goc / unit)} + {formatNumber(item.lai / unit)} = {formatNumber(item.money / unit)} {_unitText}</div>
+                                render: (item) => <div> {currency(item.goc / unit)} + {currency(item.lai / unit)} = {currency(item.money / unit)} {_unitText}</div>
                             },
                         ]}
                         dataSource={rowSelectLoan}

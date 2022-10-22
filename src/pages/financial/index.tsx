@@ -8,7 +8,7 @@ import { useCallback, useMemo, useState } from "react"
 import { Link, ThreeDotAction, Popconfirm } from "atoms"
 import { financialService } from "services/financial.service"
 import { onEnter } from "utils/event"
-import { formatNumber } from "utils/number"
+import { currency } from "utils/number"
 import { BILL_PATH } from "config/path"
 import { useSetting } from "hooks/useSetting"
 
@@ -57,7 +57,7 @@ export default function Financial() {
       _year -= 1
     }
     date = date.clone().set({ date: dateLoan, month: moment().month() })
-    
+
     if (now.date() > dateLoan) {
       date.add({ month: 1 })
     }
@@ -138,11 +138,18 @@ export default function Financial() {
 
 
   const _unitText = useMemo(() => <sup>{UNIT[unit]}</sup>, [unit])
+  const _totalInvenst = useMemo(() => dataFinancial?.reduce?.((pre: number, e: any) => pre + e.investmentMoney, 0) || 0, [dataFinancial])
+  const _totalInterest = useMemo(() => dataFinancial?.reduce?.((pre: number, e: any) => pre + e.interestMoney, 0) || 0, [dataFinancial])
 
   return (
     <MainLayout
       title="Quản lý tài chính"
-      afterTitle={<Button type='ghost' key={3} size="large"><Link to={BILL_PATH}>Thống kê bill</Link></Button>}
+      afterTitle={
+        <div className="flex gap-1 text-base items-center">
+          <Button type='ghost' key={3} size="large"><Link to={BILL_PATH}>Thống kê bill</Link></Button>
+          Tổng vốn <b>{currency(_totalInvenst)}</b>, tổng lãi: <b>{currency(_totalInterest)}</b>
+        </div>
+      }
     >
       <TableRoot>
         <div className="mb-2 flex justify-between">
@@ -207,10 +214,10 @@ export default function Financial() {
           loading={isFetching}
           onRow={(item) => ({
             style: {
-              cursor: item.isForecast ? 'auto': 'pointer'
+              cursor: item.isForecast ? 'auto' : 'pointer'
             },
             onClick: () => {
-              if(!item.isForecast) {
+              if (!item.isForecast) {
                 setTietKiemDetail(item)
                 setIsOpenAdd(true)
               }
@@ -226,8 +233,8 @@ export default function Financial() {
               render: (item) => <div>
                 {
                   item.reInvestmentMoney ? <div>
-                    {formatNumber((item.investmentMoney - item.reInvestmentMoney) / unit)} + {formatNumber(item.reInvestmentMoney / unit)} = {formatNumber(item.investmentMoney / unit)} {_unitText}
-                  </div> : <div>{formatNumber(item.investmentMoney / unit)} {_unitText}</div>
+                    {currency((item.investmentMoney - item.reInvestmentMoney) / unit)} + {currency(item.reInvestmentMoney / unit)} = {currency(item.investmentMoney / unit)} {_unitText}
+                  </div> : <div>{currency(item.investmentMoney / unit)} {_unitText}</div>
                 }
 
               </div>
@@ -239,12 +246,12 @@ export default function Financial() {
             {
               title: 'Gốc + lãi',
               render: (item) => <div>
-                {formatNumber(item.investmentMoney / unit)} + {formatNumber(item.interestMoney / unit)} = {formatNumber((item.investmentMoney + item.interestMoney) / unit)} {_unitText}
+                {currency(item.investmentMoney / unit)} + {currency(item.interestMoney / unit)} = {currency((item.investmentMoney + item.interestMoney) / unit)} {_unitText}
               </div>
             },
             {
               title: 'Tổng số tiền tiết kiệm',
-              render: (item) => <div>{formatNumber(item.sum / unit)} {_unitText}</div>
+              render: (item) => <div>{currency(item.sum / unit)} {_unitText}</div>
             },
             {
               width: 15,
@@ -274,7 +281,7 @@ export default function Financial() {
             setRowSelect(null)
             setCountYear(5)
           }}
-          title={rowSelect && <div>Lãi xuất kép: Gốc <span className="text-primary-900">{formatNumber(rowSelect.investMoney / unit)} {_unitText}</span>
+          title={rowSelect && <div>Lãi xuất kép: Gốc <span className="text-primary-900">{currency(rowSelect.investMoney / unit)} {_unitText}</span>
             <span className="ml-1 mr-1">
               <Select value={countYear} onChange={v => setCountYear(v)}>
                 <Select.Option value={5}>5 lần gửi</Select.Option>
@@ -285,7 +292,7 @@ export default function Financial() {
                 <Select.Option value={30}>30 lần gửi</Select.Option>
               </Select>
             </span>
-            --{">"} Tổng: <span className="text-primary-900">{formatNumber(rowSelectLoan[rowSelectLoan.length - 1].money / unit)} {_unitText}</span>
+            --{">"} Tổng: <span className="text-primary-900">{currency(rowSelectLoan[rowSelectLoan.length - 1].money / unit)} {_unitText}</span>
           </div>}
           footer={null}
         >
@@ -302,7 +309,7 @@ export default function Financial() {
               },
               {
                 title: 'Gốc + Lãi',
-                render: (item) => <div> {formatNumber(item.goc / unit)} + {formatNumber(item.lai / unit)} = {formatNumber(item.investmentMoney / unit)} {_unitText}</div>
+                render: (item) => <div> {currency(item.goc / unit)} + {currency(item.lai / unit)} = {currency(item.investmentMoney / unit)} {_unitText}</div>
               },
             ]}
             dataSource={rowSelectLoan}
