@@ -34,7 +34,7 @@ export const PageProvider: React.FC<{ children: any }> = ({ children }) => {
             })
         })
     }
-    return <Context.Provider value={{ openPrompt }}>{children} {map(com, (e, i) => <React.Fragment key={i}>{e}</React.Fragment>)}</Context.Provider>
+    return <Context.Provider value={{ openPrompt }}>{children} {map(com, (e: any, i: any) => <React.Fragment key={i}>{e}</React.Fragment>)}</Context.Provider>
 }
 
 export const usePage = () => useContext(Context)
